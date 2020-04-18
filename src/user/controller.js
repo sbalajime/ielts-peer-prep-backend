@@ -11,7 +11,8 @@ const getUserById = (req, res) => {
 }
 
 const postUser = (req, res) => {
-    const salt = bcrypt.genSaltSync(10);
+    console.log('rounds', process.env.SALT_ROUNDS)
+    const salt = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS));
     req.body.password = bcrypt.hashSync(req.body.password, salt);
     postUserModel(req, res)
 }
