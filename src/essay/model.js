@@ -4,14 +4,14 @@ const pool = new Pool();
 
 const postModelEssay = (req,res) =>{
 
-    const {question,essay,user} = req.body
+    const {question,essay,user,task} = req.body
     pool.connect((err,client,release) =>{
         if (err) {
             console.error('Error acquiring client', err.stack)
             res.status(500).send({ msg: 'Error acquiring client' })
 
         }
-        client.query(`INSERT INTO essays(question, essay, user_id, created_at) VALUES($1, $2, $3 ,NOW())`, [question, essay, user],
+        client.query(`INSERT INTO essays(question, essay, user_id, task,created_at) VALUES($1, $2, $3,$4 ,NOW())`, [question, essay, user ,task],
          (err, result) => {
             release()
             if (err) {
