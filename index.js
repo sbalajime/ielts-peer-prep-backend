@@ -3,6 +3,7 @@ var bodyParser = require('body-parser')
 require('dotenv').config();
 
 let userRouter = require('./src/user/router');
+let essayRouter = require('./src/essay/router')
 
 const app = express();
 
@@ -25,8 +26,12 @@ const authMiddleware = (req, res, next) => {
 }
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 
 app.use(authMiddleware)
 app.use('/user', userRouter);
+
+app.use('/essay' , essayRouter);
 
 app.listen(process.env.PORT, () => console.log(`Example app listening at http://localhost:${process.env.PORT}`))
