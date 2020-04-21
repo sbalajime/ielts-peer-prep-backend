@@ -27,8 +27,8 @@ const loginUser = async (req, res) => {
         let isPassMatch = bcrypt.compareSync(password, user[0].password);
         if (isPassMatch) {
             let token = jwt.sign({
-                data: { id: user[0].id, email: user[0].id },
-            }, 'testsecret', { expiresIn: '1h' });
+                data: { id: user[0].id, email: user[0].email },
+            }, 'testsecret', { expiresIn: '24h' });
             res.status(200).send({ msg: 'successfull', data: token })
         } else {
             res.status(401).send({ msg: 'Email or Password incorrect' })

@@ -1,5 +1,7 @@
 const express = require('express');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var cors = require('cors');
+
 require('dotenv').config();
 
 let userRouter = require('./src/user/router');
@@ -7,6 +9,7 @@ let essayRouter = require('./src/essay/router')
 
 const app = express();
 
+app.use(cors());
 const authMiddleware = (req, res, next) => {
     let isLogin = req.method == 'PUT' && (req.url == '/user/login' || req.url == '/user/login/');
     let isSignUp = req.method == 'POST' && (req.url == '/user' || req.url == '/user/')
@@ -32,6 +35,6 @@ app.use(bodyParser.json())
 app.use(authMiddleware)
 app.use('/user', userRouter);
 
-app.use('/essay' , essayRouter);
+app.use('/essay', essayRouter);
 
 app.listen(process.env.PORT, () => console.log(`Example app listening at http://localhost:${process.env.PORT}`))

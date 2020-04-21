@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const pool = new Pool();
+const jwt = require('jsonwebtoken');
 
 const getUserModel = (req, res) => {
     pool.connect((err, client, release) => {
@@ -46,14 +47,19 @@ const postUserModel = (req, res) => {
             res.status(500).send({ msg: 'Error acquiring client' })
 
         }
-        client.query(`INSERT INTO users(full_name, email, password, created_at) VALUES($1, $2, $3 ,NOW())`, [fullName, email, password], (err, result) => {
+        client.query(`INSERT INTO users(full_name, email, password, created_at) VALUES($1, $2, $3 ,NOW()) RETURNING id, email`, [fullName, email, password], (err, result) => {
             release()
             if (err) {
                 console.error('Error executing query', err.stack)
+
                 res.status(500).send({ msg: 'Error executing query' })
 
             }
-            res.status(200).send({ msg: 'successfull', rows: result.rows });
+            let user = result.rows[0];
+            let token = jwt.sign({
+                data: { id: user.id, email: user.email },
+            }, 'testsecret', { expiresIn: '24h' });
+            res.status(200).send({ msg: 'successfull', data: token });
         })
     })
 }
