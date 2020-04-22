@@ -11,11 +11,16 @@ const getUserById = (req, res) => {
     getUserByIDModel(req, res)
 }
 
-const postUser = (req, res) => {
-    console.log('rounds', process.env.SALT_ROUNDS)
-    const salt = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS));
-    req.body.password = bcrypt.hashSync(req.body.password, salt);
-    postUserModel(req, res)
+const postUser = async (req, res) => {
+    const user = await getUserByEmailModal(req.body.email);
+    if (user.length) {
+        res.status(401).send({ status: 'failed', msg: 'User account exists. Please Login.' })
+    } else {
+        const salt = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS));
+        req.body.password = bcrypt.hashSync(req.body.password, salt);
+        postUserModel(req, res)
+    }
+
 }
 
 const loginUser = async (req, res) => {
