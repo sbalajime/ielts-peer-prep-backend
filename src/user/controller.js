@@ -29,13 +29,13 @@ const loginUser = async (req, res) => {
             let token = jwt.sign({
                 data: { id: user[0].id, email: user[0].email },
             }, 'testsecret', { expiresIn: '24h' });
-            res.status(200).send({ msg: 'successfull', data: token })
+            res.status(200).send({ status: 'success', msg: 'successfull', data: token })
         } else {
-            res.status(401).send({ msg: 'Email or Password incorrect' })
+            res.status(401).send({ status: 'failed', msg: 'Email or Password incorrect' })
         }
 
     } else {
-        res.status(401).send({ msg: 'Not a valid email' })
+        res.status(401).send({ status: 'failed', msg: 'Not a valid email' })
     }
 
 }
