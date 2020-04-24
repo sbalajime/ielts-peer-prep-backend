@@ -1,11 +1,23 @@
-var {postModelEssay} = require('./model')
+var { postModelEssay, getModelEssay, getModelEssayById } = require('./model')
 
-postEssay = (req ,res) => {
+const postEssay = (req, res) => {
 
-    postModelEssay(req,res)
+    postModelEssay(req, res)
+
+}
+
+
+const getEssay = (req, res) => {
+
+    getModelEssay(req, res)
+}
+
+
+const getEssayById = (req, res) => {
+    getModelEssayById(req, res)
 
 }
 
 
 
-module.exports = {postEssay}
+module.exports = { postEssay, getEssay, getEssayById }

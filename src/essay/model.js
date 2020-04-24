@@ -26,4 +26,48 @@ const postModelEssay = (req, res) => {
 }
 
 
-module.exports = { postModelEssay }
+const getModelEssayById = (req, res) => {
+    const { id } = req.params
+    pool.connect((err, client, release) => {
+        if (err)
+            res.send({ msg: "failed", msg: "Error connecting.." })
+        else {
+            client.query(`select es.id as essayId, es.question,es.essay as answer ,es.task , es.created_at as createdTime,us.id as userid,us.full_name as username
+            from essays es left join  users us on es.user_id  = us.id 
+            where es.id = $1`, [id], (err, results) => {
+                if (err)
+                    res.status(500).send({ status: "failed", msg: "Error Quering Database" })
+                else
+                    res.status(200).send({ status: "success", msg: "Successful", rows: results.rows })
+            })
+        }
+
+    })
+
+
+}
+
+
+const getModelEssay = (req, res) => {
+
+    pool.connect((err, client, release) => {
+        if (err) {
+            res.send({ status: "failed", msg: "error acquring connection" })
+        }
+        else {
+            client.query(`select es.id as essayId, es.question ,es.task , es.created_at as createdTime,us.id as userid,us.full_name as username
+                    from essays es left join  users us on es.user_id  = us.id`, (err, results) => {
+                release()
+                if (err)
+                    res.status(500).send({ status: "failed", msg: "err in quering database" })
+                else
+                    res.status(200).send({ status: 'sucess', msg: "successful", rows: results.rows })
+            }
+            )
+        }
+    })
+
+}
+
+
+module.exports = { postModelEssay, getModelEssayById, getModelEssay }
