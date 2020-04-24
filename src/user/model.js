@@ -1,6 +1,8 @@
-const { Pool } = require('pg');
-const pool = new Pool();
+
+
 const jwt = require('jsonwebtoken');
+const pool = require('../DB/connection');
+
 
 const getUserModel = (req, res) => {
     pool.connect((err, client, release) => {

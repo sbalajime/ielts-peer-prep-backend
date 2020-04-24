@@ -1,5 +1,4 @@
-const { Pool } = require('pg')
-const pool = new Pool();
+const pool = require('../DB/connection');
 
 
 const postModelEssay = (req, res) => {
