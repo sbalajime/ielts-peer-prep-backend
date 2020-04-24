@@ -2,8 +2,8 @@ const pool = require('../DB/connection');
 
 
 const postModelEssay = (req, res) => {
-
-    const { question, essay, user, task } = req.body
+    const { question, essay, task } = req.body
+    const user = req.id
     pool.connect((err, client, release) => {
         if (err) {
             console.error('Error acquiring client', err.stack)
