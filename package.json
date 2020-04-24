@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
   },
+  "engines": {
+    "node": "10.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sbalajime/ielts-peer-prep-backend.git"

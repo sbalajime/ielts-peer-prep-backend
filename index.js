@@ -39,4 +39,4 @@ app.use('/essay', essayRouter);
 
 app.use('/test', (req, res) => res.status(200).send('Server running successfully'))
 
-app.listen(5000, () => console.log(`Example app listening at http://localhost:${process.env.PORT}`))
+app.listen(process.env.PORT, () => console.log(`Example app listening at http://localhost:${process.env.PORT}`))
