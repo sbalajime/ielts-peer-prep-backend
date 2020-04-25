@@ -23,4 +23,21 @@ const insertData = (data) => {
     })
 }
 
-module.exports = { postReviewModal }
+
+const getReviewByIdModal = (req, res) => {
+    let essayId = req.params.id;
+    executeQuery(`SELECT  json_agg(band_object) as reviews  FROM  
+        (SELECT 
+            bd.label, 
+            r.value, 
+            r.essay_id, 
+            json_build_object('label', bd.label, 'value', r.value) AS band_object 
+        FROM reviews as r 
+        LEFT JOIN band_descriptors as bd 
+        ON r.band_descriptor_id = bd.id) as review_band 
+        GROUP BY essay_id HAVING essay_id = $1;`, [essayId])
+        .then(result => res.status(200).send({ ...result, rows: result.rows.length ? result.rows[0].reviews : [] }))
+        .catch(err => res.status(500).send(err))
+}
+
+module.exports = { postReviewModal, getReviewByIdModal }

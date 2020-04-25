@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-var { postReviewModal } = require('./model')
+var { postReviewModal, getReviewByIdModal } = require('./model')
 
 const postReview = (req, res) => {
     console.log('post review controller')
@@ -7,4 +7,9 @@ const postReview = (req, res) => {
 }
 
 
-module.exports = { postReview }
+const getReviewById = (req, res) => {
+    getReviewByIdModal(req, res);
+}
+
+
+module.exports = { postReview, getReviewById }
