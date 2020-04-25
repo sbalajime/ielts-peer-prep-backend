@@ -5,4 +5,23 @@ const pool = new Pool({
     connectionString: connectionString,
 })
 
-module.exports = pool;
+const executeQuery = (query, params) => {
+    return new Promise((resolve, reject) => {
+        pool.connect((err, client, release) => {
+            if (err) {
+                console.error('Error acquiring client', err.stack)
+                reject({ status: 'failed', msg: 'Error acquiring client' })
+            }
+            client.query(query, params, (err, result) => {
+                release()
+                if (err) {
+                    console.error('Error executing query', err.stack)
+                    reject({ status: 'failed', msg: 'Error executing query' })
+                }
+                resolve({ status: 'success', msg: 'successfull', rows: result.rows })
+            })
+        })
+    })
+}
+
+module.exports = { pool, executeQuery };

@@ -38,9 +38,7 @@ CREATE TABLE "reviews"
     "essay_id" int,
     "band_descriptor_id" int,
     "value" varchar(100),
-    "name" varchar(100),
-    "destined_user" int,
-    "given_user" int,
+    "user_id" int,
     "created_at" timestamp
 );
 ALTER TABLE "user_class_code" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
@@ -48,5 +46,18 @@ ALTER TABLE "user_class_code" ADD FOREIGN KEY ("class_code_id") REFERENCES "clas
 ALTER TABLE "essays" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 ALTER TABLE "reviews" ADD FOREIGN KEY ("essay_id") REFERENCES "essays" ("id");
 ALTER TABLE "reviews" ADD FOREIGN KEY ("band_descriptor_id") REFERENCES "band_descriptors" ("id");
-ALTER TABLE "reviews" ADD FOREIGN KEY ("destined_user") REFERENCES "users" ("id");
-ALTER TABLE "reviews" ADD FOREIGN KEY ("given_user") REFERENCES "users" ("id");
+ALTER TABLE "reviews" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+
+INSERT INTO band_descriptors
+    (label, type)
+VALUES('Task Achievement', 'slide');
+INSERT INTO band_descriptors
+    (label, type)
+VALUES('Coherence and Cohesion', 'slide');
+INSERT INTO band_descriptors
+    (label, type)
+VALUES('Lexical Resource', 'slide');
+INSERT INTO band_descriptors
+    (label, type)
+VALUES('Grammatical Range and Accuracy', 'slide');

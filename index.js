@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 let userRouter = require('./src/user/router');
-let essayRouter = require('./src/essay/router')
+let essayRouter = require('./src/essay/router');
+let reviewRouter = require('./src/review/router');
 
 const app = express();
 
@@ -23,6 +24,7 @@ const authMiddleware = (req, res, next) => {
             if (err)
                 res.status(500).send({ status: "failed", msg: "Un authorized" })
             else {
+                console.log('decoded data', decoded)
                 req.id = decoded.data.id
                 next();
             }
@@ -47,6 +49,8 @@ app.use(authMiddleware)
 app.use('/user', userRouter);
 
 app.use('/essay', essayRouter);
+
+app.use('/review', reviewRouter);
 
 app.use('/test', (req, res) => res.status(200).send('Server running successfully'))
 
