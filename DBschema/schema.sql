@@ -37,7 +37,7 @@ CREATE TABLE "reviews"
     "id" SERIAL PRIMARY KEY,
     "essay_id" int,
     "band_descriptor_id" int,
-    "value" varchar(100),
+    "value" int,
     "user_id" int,
     "created_at" timestamp
 );
