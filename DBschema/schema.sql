@@ -27,8 +27,8 @@ CREATE TABLE "essays"
 (
     "id" SERIAL PRIMARY KEY,
     "task" varchar(50),
-    "question" varchar(500),
-    "essay" varchar(500),
+    "question" varchar,
+    "essay" varchar,
     "user_id" int,
     "created_at" timestamp
 );

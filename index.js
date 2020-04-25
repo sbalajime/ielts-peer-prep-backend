@@ -1,6 +1,7 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
@@ -13,10 +14,20 @@ app.use(cors());
 const authMiddleware = (req, res, next) => {
     let isLogin = req.method == 'PUT' && (req.url == '/user/login' || req.url == '/user/login/');
     let isSignUp = req.method == 'POST' && (req.url == '/user' || req.url == '/user/')
-    if (isLogin && isSignUp) {
+    console.log(isLogin, isSignUp);
+    if (isLogin || isSignUp) {
         next();
     } else {
-        next();
+        const { authorization } = req.headers
+        jwt.verify(authorization, 'testsecret', (err, decoded) => {
+            if (err)
+                res.status(500).send({ status: "failed", msg: "Un authorized" })
+            else {
+                req.id = decoded.data.id
+                next();
+            }
+        })
+
         // try {
         //     let verify = jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxMCwiZW1haWwiOjExfSwiaWF0IjoxNTg3Mjg0MDM2LCJleHAiOjE1ODcyODc2MzZ9.65slG4P1JGIDqLeEKcJK50aWu_r2mGt4Qp-uqfjnyu0', 'testsecret');
         //     req.id = verify.data.id;

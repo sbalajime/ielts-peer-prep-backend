@@ -12,7 +12,7 @@ const postModelEssay = (req, res) => {
         }
         client.query(`INSERT INTO essays(question, essay, user_id, task,created_at) VALUES($1, $2, $3,$4 ,NOW())`, [question, essay, user, task],
             (err, result) => {
-                release()
+                release();
                 if (err) {
                     console.error('Error executing query', err.stack)
                     res.status(500).send({ status: 'failed', msg: 'Error executing query' })
@@ -35,6 +35,7 @@ const getModelEssayById = (req, res) => {
             client.query(`select es.id as essayId, es.question,es.essay as answer ,es.task , es.created_at as createdTime,us.id as userid,us.full_name as username
             from essays es left join  users us on es.user_id  = us.id 
             where es.id = $1`, [id], (err, results) => {
+                release()
                 if (err)
                     res.status(500).send({ status: "failed", msg: "Error Quering Database" })
                 else
@@ -61,7 +62,7 @@ const getModelEssay = (req, res) => {
                 if (err)
                     res.status(500).send({ status: "failed", msg: "err in quering database" })
                 else
-                    res.status(200).send({ status: 'sucess', msg: "successful", rows: results.rows })
+                    res.status(200).send({ status: 'success', msg: "successful", rows: results.rows })
             }
             )
         }
