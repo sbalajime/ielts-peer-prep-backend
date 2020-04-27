@@ -27,7 +27,7 @@ const insertData = (data) => {
 const getReviewByIdModal = (req, res) => {
     let essayId = req.params.id;
     executeQuery(`select json_agg(json_build_object('label' , bd.label ,'value' ,rw.value)) as reviews  from(
-        select essay_id,band_descriptor_id,round(avg(value)) as value from reviews
+        select essay_id,band_descriptor_id,floor(2* avg(value))/2 as value from reviews
         where essay_id = $1
         group by essay_id,band_descriptor_id) rw left join band_descriptors bd on 
         rw.band_descriptor_id  = bd.id  
