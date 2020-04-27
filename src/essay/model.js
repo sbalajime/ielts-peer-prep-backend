@@ -21,8 +21,10 @@ const getModelEssayById = (req, res) => {
 
 
 const getModelEssay = (req, res) => {
-    executeQuery(`select es.id as essayId, (SELECT exists(SELECT SUM(id) FROM reviews GROUP BY essay_id , user_id HAVING user_id = $1 AND essay_id = es.id)) as reviewed_by_me ,es.question ,es.task , es.created_at as createdTime,us.id as userid,us.full_name as username
-    from essays es left join  users us on es.user_id  = us.id`, [req.id])
+    executeQuery(`select es.id as essayId, (SELECT exists(SELECT id FROM reviews 
+        where user_id = $1 AND essay_id = es.id) ) as reviewed_by_me ,es.question ,es.task , es.created_at as createdTime,us.id as userid,us.full_name as username
+            from essays es left join  users us on es.user_id  = us.id
+            where es.user_id <> $1`, [req.id])
         .then(result => res.status(200).send(result))
         .catch(err => res.status(500).send(err))
 }
