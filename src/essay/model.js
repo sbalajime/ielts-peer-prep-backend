@@ -12,10 +12,15 @@ const postModelEssay = (req, res) => {
 
 const getModelEssayById = (req, res) => {
     const { id } = req.params
+    const user = req.id
     executeQuery(`select es.id as essayId, es.question,es.essay as answer ,es.task , es.created_at as createdTime,us.id as userid,us.full_name as username
     from essays es left join  users us on es.user_id  = us.id 
-    where es.id = $1`, [id])
-        .then(result => res.status(200).send(result))
+    where es.id = $1 
+    and es.user_id <> $2`
+        , [id, user])
+        .then(result => {
+            res.status(200).send(result)
+        })
         .catch(err => res.status(500).send(err))
 }
 

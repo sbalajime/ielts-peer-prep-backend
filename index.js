@@ -15,7 +15,6 @@ app.use(cors());
 const authMiddleware = (req, res, next) => {
     let isLogin = req.method == 'PUT' && (req.url == '/user/login' || req.url == '/user/login/');
     let isSignUp = req.method == 'POST' && (req.url == '/user' || req.url == '/user/')
-    console.log(isLogin, isSignUp);
     if (isLogin || isSignUp) {
         next();
     } else {
@@ -24,7 +23,7 @@ const authMiddleware = (req, res, next) => {
             if (err)
                 res.status(500).send({ status: "failed", msg: "Un authorized" })
             else {
-                console.log('decoded data', decoded)
+                // console.log('decoded data', decoded)
                 req.id = decoded.data.id
                 next();
             }
