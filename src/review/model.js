@@ -26,18 +26,22 @@ const insertData = (data) => {
 
 const getReviewByIdModal = (req, res) => {
     let essayId = req.params.id;
-    executeQuery(`
-    select 
+    let user = req.id
+    executeQuery(`select exists(select user_id from reviews where user_id = $2 and essay_id = $1) reviewedbyme,
     json_agg(json_build_object('label' , bd.label ,'value' ,rw.value)) as reviews
     from(
-    select essay_id,band_descriptor_id,floor(2* avg(value))/2 as value from reviews
-    where essay_id = $1
+    select r.essay_id,r.band_descriptor_id,floor(2* avg(r.value))/2 as value from reviews r , 
+	essays e
+    where 
+		r.essay_id = e.id
+	and	r.essay_id = $1 
+	and e.user_id <> $2
     group by essay_id,band_descriptor_id) rw left join band_descriptors bd on 
     rw.band_descriptor_id  = bd.id  
-    and bd.type = 'slide'`, [essayId])
+    and bd.type = 'slide'`, [essayId, user])
         .then(result => {
             console.log(result.rows[0])
-            res.status(200).send({ ...result, rows: result.rows[0].reviews !== null ? result.rows[0].reviews : [] })
+            res.status(200).send({ ...result, rows: result.rows[0].reviews !== null ? result.rows[0] : [] })
         })
         .catch(err => res.status(500).send(err))
 }
