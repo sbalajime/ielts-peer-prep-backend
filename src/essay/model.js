@@ -13,9 +13,9 @@ const postModelEssay = (req, res) => {
 const getModelEssayById = (req, res) => {
     const { id } = req.params
     const user = req.id
-    executeQuery(`select es.id as essayId, es.question,es.essay as answer ,es.task , es.created_at as createdTime,us.id as userid,us.full_name as username
+    executeQuery(`select exists ( select  user_id from reviews where user_id = $2 and essay_id = $1) reviewedbyme, es.id as essayId,es.question,es.essay as answer ,es.task , es.created_at as createdTime,us.id as userid,us.full_name as username
     from essays es left join  users us on es.user_id  = us.id 
-    where es.id = $1 
+    where es.id = $1
     and es.user_id <> $2`
         , [id, user])
         .then(result => {
