@@ -27,6 +27,7 @@ CREATE TABLE "essays"
 (
     "id" SERIAL PRIMARY KEY,
     "task" varchar(50),
+    "type" varchar(10),
     "question" varchar,
     "essay" varchar,
     "user_id" int,
