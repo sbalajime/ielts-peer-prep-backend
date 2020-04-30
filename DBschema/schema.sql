@@ -29,7 +29,7 @@ CREATE TABLE "essays"
     "task" varchar(50),
     "type" varchar(10),
     "question" varchar,
-    "essay" varchar,
+    "essay" varchar(2000),
     "user_id" int,
     "created_at" timestamp
 );
