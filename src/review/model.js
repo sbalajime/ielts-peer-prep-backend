@@ -3,17 +3,18 @@ const { executeQuery } = require('../DB/connection');
 const postReviewModal = (req, res) => {
     const { id: userId } = req;
     const { sliders, essayId, comment } = req.body;
+
     // res.status(200).send({ status: 'success', msg: 'successfull', rows: sliders });
     let promises = [];
     let keys = Object.keys(sliders);
-    for (let i = 0; i < keys.length + 1; i++) {
-        if (i != keys.length - 1) {
-            let key = keys[i];
-            promises.push(insertData({ essayId, key, value: sliders[key], userId }))
-        } else {
-            promises.push(insertComment({ essayId, userId, comment }))
-        }
+    console.log(keys)
+    for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        promises.push(insertData({ essayId, key, value: sliders[key], userId }))
     }
+    promises.push(insertComment({ essayId, userId, comment }))
+
+
     Promise.all(promises)
         .then(result => res.status(200).send({ status: 'success', msg: "successful" }))
         .catch(err => res.status(500).send({ status: "failed", msg: "err in inserting database" }))
