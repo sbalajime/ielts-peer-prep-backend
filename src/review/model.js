@@ -7,7 +7,7 @@ const postReviewModal = (req, res) => {
     let promises = [];
     let keys = Object.keys(sliders);
     for (let i = 0; i < keys.length + 1; i++) {
-        if (i != keys.length - 1) {
+        if (i != keys.length) {
             let key = keys[i];
             promises.push(insertData({ essayId, key, value: sliders[key], userId }))
         } else {
