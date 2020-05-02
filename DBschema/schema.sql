@@ -42,6 +42,19 @@ CREATE TABLE "reviews"
     "user_id" int,
     "created_at" timestamp
 );
+
+
+create table "comments"(
+"id" serial primary key,
+"essay_id" int,
+"comment" varchar(200),
+"user_id" int,
+"created_at" timestamp
+)
+
+
+
+
 ALTER TABLE "user_class_code" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 ALTER TABLE "user_class_code" ADD FOREIGN KEY ("class_code_id") REFERENCES "class_code" ("id");
 ALTER TABLE "essays" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
