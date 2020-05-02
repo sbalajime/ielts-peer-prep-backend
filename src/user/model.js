@@ -11,7 +11,6 @@ const getUserModel = (req, res) => {
 }
 
 const getUserByIDModel = async (req, res) => {
-    console.log('getUserByIDModal');
     executeQuery('SELECT * FROM users where id = $1', [1])
         .then(result => res.status(200).send(result))
         .catch(err => res.status(500).send(err))
@@ -35,10 +34,9 @@ const postUserModel = (req, res) => {
 
 
 const getUserByEmailModal = (email) => {
-    console.log('email', email)
     return new Promise((resolve, reject) => {
         executeQuery(`SELECT * FROM users where email = $1`, [email])
-            .then(result => { console.log('reulst.', result); resolve(result.rows) })
+            .then(result => resolve(result.rows))
             .catch(err => reject({ msg: 'Error executing query' }))
     })
 }

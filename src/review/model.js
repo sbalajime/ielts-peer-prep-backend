@@ -41,21 +41,26 @@ const insertComment = (data) => {
 
 const getReviewByIdModal = (req, res) => {
     let essayId = req.params.id;
-    let user = req.id
-    executeQuery(`select exists(select user_id from reviews where user_id = $2 and essay_id = $1) reviewedbyme,
-    exists(select user_id from essays where user_id = $2 and id = $1) submittedbyme
-    ,json_agg(json_build_object('label' , bd.label ,'value' ,rw.value)) as reviews
-    from(
-    select r.essay_id,r.band_descriptor_id,floor(2* avg(r.value))/2 as value from reviews r , 
-	essays e
-    where 
-		r.essay_id = e.id
-	and	r.essay_id = $1 
-    group by essay_id,band_descriptor_id) rw left join band_descriptors bd on 
-    rw.band_descriptor_id  = bd.id  
-    and bd.type = 'slide'`, [essayId, user])
+    let user = req.id;
+    console.log('essayId', essayId, 'user', user)
+    executeQuery(`	
+    SELECT com.essay_id, rd.reviewedbyme, rd.submittedbyme, rd.reviews, com.comments_arr FROM (SELECT rw.essay_id,
+		exists(SELECT user_id FROM reviews WHERE user_id = $2 AND essay_id = $1) reviewedbyme,
+		exists(SELECT user_id FROM essays WHERE user_id = $2 AND id = $1) submittedbyme,
+		json_agg(json_build_object('label' , bd.label ,'value' ,rw.value)) AS reviews
+	FROM (
+		SELECT 
+			r.essay_id,
+			r.band_descriptor_id,
+			floor(2* avg(r.value))/2 AS value 
+		FROM reviews r , essays e 
+		WHERE	r.essay_id = e.id AND	r.essay_id = $1 
+		GROUP BY essay_id,band_descriptor_id) rw 
+	LEFT JOIN band_descriptors bd ON rw.band_descriptor_id  = bd.id AND bd.type = 'slide' GROUP BY rw.essay_id)
+    AS rd LEFT JOIN (SELECT c.essay_id, json_agg(json_build_object('comment' , c.comment ,'user_name' ,u.full_name)) AS comments_arr FROM comments c LEFT JOIN essays e ON e.id = c.essay_id LEFT JOIN users u ON u.id = c.user_id GROUP BY  c.essay_id)
+    AS com ON rd.essay_id = com.essay_id`, [essayId, user])
         .then(result => {
-            console.log(result.rows[0])
+            console.log('result', result.rows)
             res.status(200).send({ ...result, rows: result.rows[0] })
         })
         .catch(err => res.status(500).send(err))

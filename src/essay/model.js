@@ -18,7 +18,6 @@ const getModelEssayById = (req, res) => {
     where es.id = $1`
         , [id, user])
         .then(result => {
-            console.log(result)
             res.status(200).send(result)
         })
         .catch(err => res.status(500).send(err))

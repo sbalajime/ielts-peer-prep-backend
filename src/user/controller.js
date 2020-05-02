@@ -27,7 +27,6 @@ const loginUser = async (req, res) => {
     // loginUserModel(req, res)getUserByEmail
     const user = await getUserByEmailModal(req.body.email);
     const { password } = req.body;
-    console.log('user', user);
     if (user.length) {
         let isPassMatch = bcrypt.compareSync(password, user[0].password);
         if (isPassMatch) {
