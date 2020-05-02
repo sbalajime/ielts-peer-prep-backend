@@ -29,7 +29,7 @@ CREATE TABLE "essays"
     "task" varchar(50),
     "type" varchar(10),
     "question" varchar,
-    "essay" varchar(2000),
+    "essay" varchar(5000),
     "user_id" int,
     "created_at" timestamp
 );
@@ -44,12 +44,12 @@ CREATE TABLE "reviews"
 );
 
 
-create table "comments"(
-"id" serial primary key,
-"essay_id" int,
-"comment" varchar(200),
-"user_id" int,
-"created_at" timestamp
+CREATE TABLE "comments"
+(
+    "id" SERIAL PRIMARY KEY,
+    "essay_id" int,
+    "comment" varchar(2000),
+    "user_id" int
 )
 
 
@@ -61,6 +61,8 @@ ALTER TABLE "essays" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 ALTER TABLE "reviews" ADD FOREIGN KEY ("essay_id") REFERENCES "essays" ("id");
 ALTER TABLE "reviews" ADD FOREIGN KEY ("band_descriptor_id") REFERENCES "band_descriptors" ("id");
 ALTER TABLE "reviews" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "comments" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "comments" ADD FOREIGN KEY ("essay_id") REFERENCES "essays" ("id");
 
 
 INSERT INTO band_descriptors

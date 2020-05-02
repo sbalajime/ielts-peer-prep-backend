@@ -2,22 +2,37 @@ const { executeQuery } = require('../DB/connection');
 
 const postReviewModal = (req, res) => {
     const { id: userId } = req;
-    const { sliders, essayId } = req.body;
+    const { sliders, essayId, comment } = req.body;
     // res.status(200).send({ status: 'success', msg: 'successfull', rows: sliders });
-    let promises = Object.keys(sliders).map(key => {
-        return insertData({ essayId, key, value: sliders[key], userId });
-
-    });
+    let promises = [];
+    let keys = Object.keys(sliders);
+    for (let i = 0; i < keys.length + 1; i++) {
+        if (i != keys.length - 1) {
+            let key = keys[i];
+            promises.push(insertData({ essayId, key, value: sliders[key], userId }))
+        } else {
+            promises.push(insertComment({ essayId, userId, comment }))
+        }
+    }
     Promise.all(promises)
         .then(result => res.status(200).send({ status: 'success', msg: "successful" }))
         .catch(err => res.status(500).send({ status: "failed", msg: "err in inserting database" }))
 }
 
 const insertData = (data) => {
-    console.log('insertData')
     const { essayId, key, value, userId } = data;
     return new Promise((resolve, reject) => {
         executeQuery(`INSERT INTO reviews(essay_id, band_descriptor_id, value, user_id, created_at) VALUES($1, (SELECT id FROM band_descriptors WHERE label=$2), $3,$4, NOW()) RETURNING id`, [essayId, key, value, userId])
+            .then(result => resolve(result.rows))
+            .catch(err => reject({ status: 'failed', msg: 'Error executing query' }))
+    })
+}
+
+
+const insertComment = (data) => {
+    const { essayId, comment, userId } = data;
+    return new Promise((resolve, reject) => {
+        executeQuery(`INSERT INTO comments(essay_id, user_id, comment) VALUES($1, $2, $3) RETURNING id`, [essayId, userId, comment])
             .then(result => resolve(result.rows))
             .catch(err => reject({ status: 'failed', msg: 'Error executing query' }))
     })
