@@ -11,7 +11,7 @@ const getUserModel = (req, res) => {
 }
 
 const getUserByIDModel = async (req, res) => {
-    executeQuery('SELECT * FROM users where id = $1', [1])
+    executeQuery('SELECT * FROM users where id = $1', [req.id])
         .then(result => res.status(200).send(result))
         .catch(err => res.status(500).send(err))
 }
