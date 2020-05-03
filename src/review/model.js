@@ -53,7 +53,7 @@ const getReviewByIdModal = (req, res) => {
 		SELECT 
 			r.essay_id,
 			r.band_descriptor_id,
-			round(avg(r.value) * 2)/2 AS value 
+			round(avg(r.value) * 2 , .5)/2 AS value 
 		FROM reviews r , essays e 
 		WHERE	r.essay_id = e.id AND	r.essay_id = $1 
 		GROUP BY essay_id,band_descriptor_id) rw 
