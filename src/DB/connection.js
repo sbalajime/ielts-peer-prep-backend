@@ -11,15 +11,19 @@ const executeQuery = (query, params) => {
             if (err) {
                 console.error('Error acquiring client', err.stack)
                 reject({ status: 'failed', msg: 'Error acquiring client' })
+            } else {
+                client.query(query, params, (err, result) => {
+                    release();
+                    if (err) {
+                        console.error('Error executing query', err.stack)
+                        reject({ status: 'failed', msg: 'Error executing query' })
+                    } else {
+                        resolve({ status: 'success', msg: 'successfull', rows: result.rows })
+                    }
+
+                });
             }
-            client.query(query, params, (err, result) => {
-                release()
-                if (err) {
-                    console.error('Error executing query', err.stack)
-                    reject({ status: 'failed', msg: 'Error executing query' })
-                }
-                resolve({ status: 'success', msg: 'successfull', rows: result.rows })
-            })
+
         })
     })
 }

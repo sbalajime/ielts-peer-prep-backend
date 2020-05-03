@@ -17,7 +17,7 @@ const postReviewModal = (req, res) => {
 
     Promise.all(promises)
         .then(result => res.status(200).send({ status: 'success', msg: "successful" }))
-        .catch(err => res.status(500).send({ status: "failed", msg: "err in inserting database" }))
+        .catch(err => res.status(500).send({ status: "failed", msg: "Error while inserting data in database" }))
 }
 
 const insertData = (data) => {
