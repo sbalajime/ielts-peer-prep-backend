@@ -50,7 +50,7 @@ CREATE TABLE "comments"
     "essay_id" int,
     "comment" varchar(2000),
     "user_id" int
-)
+);
 
 
 

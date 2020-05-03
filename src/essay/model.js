@@ -27,7 +27,7 @@ const getModelEssayById = (req, res) => {
 const getModelEssay = (req, res) => {
     executeQuery(`select es.id as essayId, (SELECT exists(SELECT id FROM reviews 
         where user_id = $1 AND essay_id = es.id) ) as reviewed_by_me,(case when es.user_id = $1 then true else false end ) submittedbyme  ,es.question ,es.task,es.type , es.created_at as createdTime,us.id as userid,us.full_name as username
-            from essays es left join  users us on es.user_id  = us.id`, [req.id])
+            from essays es left join  users us on es.user_id  = us.id ORDER BY createdTime DESC`, [req.id])
         .then(result => res.status(200).send(result))
         .catch(err => res.status(500).send(err))
 }
